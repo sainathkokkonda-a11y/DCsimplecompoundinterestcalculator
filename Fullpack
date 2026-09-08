@@ -1,0 +1,280 @@
+<style>
+  .global-interest-container {
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  .global-interest-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 480px;
+    margin: 20px auto;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(13, 71, 161, 0.15);
+    border: 2px solid #1976d2;
+    overflow: hidden;
+  }
+  
+  .global-interest-header {
+    background: linear-gradient(135deg, #0d47a1, #1976d2);
+    color: #ffffff;
+    padding: 24px 20px;
+    text-align: center;
+  }
+  
+  .global-interest-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+  }
+  
+  .global-interest-header p {
+    margin: 6px 0 0 0;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+  
+  .global-interest-body {
+    padding: 24px 20px;
+  }
+  
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0d47a1;
+    margin-bottom: 8px;
+  }
+  
+  .input-flex-wrapper {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .currency-select, .type-select {
+    padding: 12px;
+    font-size: 15px;
+    border: 2px solid #bbdefb;
+    border-radius: 8px;
+    outline: none;
+    background-color: #e3f2fd;
+    color: #0d47a1;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .global-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border: 2px solid #bbdefb;
+    border-radius: 8px;
+    outline: none;
+    color: #0d47a1;
+    font-weight: 600;
+  }
+  
+  .global-input:focus, .currency-select:focus, .type-select:focus {
+    border-color: #1976d2;
+  }
+  
+  .btn-calculate {
+    width: 100%;
+    background: #1976d2;
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    margin-top: 10px;
+    box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3);
+  }
+  
+  .btn-calculate:hover {
+    background: #0d47a1;
+  }
+  
+  .btn-calculate:active {
+    transform: scale(0.98);
+  }
+  
+  .result-box {
+    margin-top: 24px;
+    background: #e3f2fd;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #90caf9;
+  }
+  
+  .result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #90caf9;
+  }
+  
+  .result-item:last-child {
+    border-bottom: none;
+  }
+  
+  .result-label {
+    font-size: 14px;
+    color: #1565c0;
+    font-weight: 600;
+  }
+  
+  .result-value {
+    font-size: 16px;
+    color: #0d47a1;
+    font-weight: 700;
+  }
+  
+  .highlight-total {
+    background: #1976d2;
+    color: #ffffff;
+    padding: 14px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .highlight-total .result-label {
+    color: #bbdefb;
+  }
+  
+  .highlight-total .result-value {
+    color: #ffffff;
+    font-size: 22px;
+  }
+</style>
+
+<div class="global-interest-container">
+  <div class="global-interest-card">
+    <div class="global-interest-header">
+      <h2>Simple & Compound Interest Calculator</h2>
+      <p>Calculate interest earnings & total maturity amount</p>
+    </div>
+    
+    <div class="global-interest-body">
+      <div class="input-group">
+        <label for="principalAmount">Principal Amount</label>
+        <div class="input-flex-wrapper">
+          <select id="interestCurrencySymbol" class="currency-select" onchange="calculateInterest()">
+            <option value="$">$ (USD)</option>
+            <option value="€">€ (EUR)</option>
+            <option value="£">£ (GBP)</option>
+            <option value="₹" selected>₹ (INR)</option>
+            <option value="A$">A$ (AUD)</option>
+            <option value="C$">C$ (CAD)</option>
+            <option value="AED">AED</option>
+          </select>
+          <input type="number" id="principalAmount" class="global-input" placeholder="e.g. 10000" value="10000">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="annualRate">Annual Interest Rate (%)</label>
+        <input type="number" id="annualRate" class="global-input" step="0.1" placeholder="e.g. 6.5" value="6.5">
+      </div>
+
+      <div class="input-group">
+        <label for="timeYears">Time Period (Years)</label>
+        <input type="number" id="timeYears" class="global-input" placeholder="e.g. 5" value="5">
+      </div>
+
+      <div class="input-group">
+        <label for="interestType">Interest Type</label>
+        <select id="interestType" class="type-select" style="width: 100%;" onchange="toggleCompoundingGroup(); calculateInterest();">
+          <option value="simple">Simple Interest</option>
+          <option value="compound" selected>Compound Interest</option>
+        </select>
+      </div>
+
+      <div class="input-group" id="compoundFreqGroup">
+        <label for="compoundFrequency">Compounding Frequency</label>
+        <select id="compoundFrequency" class="type-select" style="width: 100%;" onchange="calculateInterest()">
+          <option value="1" selected>Annually (1/yr)</option>
+          <option value="2">Semi-Annually (2/yr)</option>
+          <option value="4">Quarterly (4/yr)</option>
+          <option value="12">Monthly (12/yr)</option>
+        </select>
+      </div>
+
+      <button class="btn-calculate" onclick="calculateInterest()">Calculate Amount</button>
+
+      <div class="result-box">
+        <div class="result-item highlight-total">
+          <span class="result-label">Total Future Value:</span>
+          <span class="result-value" id="futureValue">0</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Principal Amount:</span>
+          <span class="result-value" id="basePrincipal">0</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Total Interest Earned:</span>
+          <span class="result-value" id="totalInterestEarned">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleCompoundingGroup() {
+    const type = document.getElementById('interestType').value;
+    const freqGroup = document.getElementById('compoundFreqGroup');
+    if (type === 'simple') {
+      freqGroup.style.display = 'none';
+    } else {
+      freqGroup.style.display = 'block';
+    }
+  }
+
+  function calculateInterest() {
+    const P = parseFloat(document.getElementById('principalAmount').value);
+    const rAnnual = parseFloat(document.getElementById('annualRate').value);
+    const t = parseFloat(document.getElementById('timeYears').value);
+    const type = document.getElementById('interestType').value;
+    const n = parseFloat(document.getElementById('compoundFrequency').value);
+    const curr = document.getElementById('interestCurrencySymbol').value;
+
+    if (isNaN(P) || isNaN(rAnnual) || isNaN(t) || P <= 0 || rAnnual < 0 || t <= 0) {
+      alert("Please enter valid positive numbers for all input fields.");
+      return;
+    }
+
+    const r = rAnnual / 100;
+    let interest = 0;
+    let total = 0;
+
+    if (type === 'simple') {
+      // Simple Interest Formula: A = P * (1 + r * t)
+      interest = P * r * t;
+      total = P + interest;
+    } else {
+      // Compound Interest Formula: A = P * (1 + r/n)^(n*t)
+      total = P * Math.pow(1 + (r / n), n * t);
+      interest = total - P;
+    }
+
+    const formatCurrency = (num) => {
+      return curr + ' ' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+
+    document.getElementById('futureValue').innerText = formatCurrency(total);
+    document.getElementById('basePrincipal').innerText = formatCurrency(P);
+    document.getElementById('totalInterestEarned').innerText = formatCurrency(interest);
+  }
+
+  // Initial setup
+  toggleCompoundingGroup();
+  calculateInterest();
+</script>
