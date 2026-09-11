@@ -1,0 +1,71 @@
+<div class="global-interest-container">
+  <div class="global-interest-card">
+    <div class="global-interest-header">
+      <h2>Simple & Compound Interest Calculator</h2>
+      <p>Calculate interest earnings & total maturity amount</p>
+    </div>
+    
+    <div class="global-interest-body">
+      <div class="input-group">
+        <label for="principalAmount">Principal Amount</label>
+        <div class="input-flex-wrapper">
+          <select id="interestCurrencySymbol" class="currency-select" onchange="calculateInterest()">
+            <option value="$">$ (USD)</option>
+            <option value="€">€ (EUR)</option>
+            <option value="£">£ (GBP)</option>
+            <option value="₹" selected>₹ (INR)</option>
+            <option value="A$">A$ (AUD)</option>
+            <option value="C$">C$ (CAD)</option>
+            <option value="AED">AED</option>
+          </select>
+          <input type="number" id="principalAmount" class="global-input" placeholder="e.g. 10000" value="10000">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="annualRate">Annual Interest Rate (%)</label>
+        <input type="number" id="annualRate" class="global-input" step="0.1" placeholder="e.g. 6.5" value="6.5">
+      </div>
+
+      <div class="input-group">
+        <label for="timeYears">Time Period (Years)</label>
+        <input type="number" id="timeYears" class="global-input" placeholder="e.g. 5" value="5">
+      </div>
+
+      <div class="input-group">
+        <label for="interestType">Interest Type</label>
+        <select id="interestType" class="type-select" style="width: 100%;" onchange="toggleCompoundingGroup(); calculateInterest();">
+          <option value="simple">Simple Interest</option>
+          <option value="compound" selected>Compound Interest</option>
+        </select>
+      </div>
+
+      <div class="input-group" id="compoundFreqGroup">
+        <label for="compoundFrequency">Compounding Frequency</label>
+        <select id="compoundFrequency" class="type-select" style="width: 100%;" onchange="calculateInterest()">
+          <option value="1" selected>Annually (1/yr)</option>
+          <option value="2">Semi-Annually (2/yr)</option>
+          <option value="4">Quarterly (4/yr)</option>
+          <option value="12">Monthly (12/yr)</option>
+        </select>
+      </div>
+
+      <button class="btn-calculate" onclick="calculateInterest()">Calculate Amount</button>
+
+      <div class="result-box">
+        <div class="result-item highlight-total">
+          <span class="result-label">Total Future Value:</span>
+          <span class="result-value" id="futureValue">0</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Principal Amount:</span>
+          <span class="result-value" id="basePrincipal">0</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Total Interest Earned:</span>
+          <span class="result-value" id="totalInterestEarned">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
